@@ -1,0 +1,330 @@
+// Prisma Schema for Pantri Database
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===== USER & AUTHENTICATION =====
+
+model User {
+  id                String             @id @default(uuid())
+  email             String             @unique
+  passwordHash      String             @map("password_hash")
+  firstName         String?            @map("first_name")
+  lastName          String?            @map("last_name")
+  appleId           String?            @unique @map("apple_id")
+  emailVerified     Boolean            @default(false) @map("email_verified")
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+
+  // Relations
+  householdMembers  HouseholdMember[]
+  createdHouseholds Household[]        @relation("HouseholdCreator")
+  refreshTokens     RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+// ===== HOUSEHOLD =====
+
+model Household {
+  id        String   @id @default(uuid())
+  name      String
+  createdBy String   @map("created_by")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  creator         User              @relation("HouseholdCreator", fields: [createdBy], references: [id])
+  members         HouseholdMember[]
+  inventoryItems  InventoryItem[]
+  shoppingLists   ShoppingList[]
+  wasteEvents     WasteEvent[]
+  preferences     HouseholdPreferences?
+
+  @@map("households")
+}
+
+model HouseholdMember {
+  id          String   @id @default(uuid())
+  householdId String   @map("household_id")
+  userId      String   @map("user_id")
+  role        String   @default("member") // admin, member
+  joinedAt    DateTime @default(now()) @map("joined_at")
+
+  household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([householdId, userId])
+  @@map("household_members")
+}
+
+model HouseholdPreferences {
+  id                  String   @id @default(uuid())
+  householdId         String   @unique @map("household_id")
+  dietaryRestrictions Json?    @map("dietary_restrictions") // ["vegetarian", "halal", "gluten-free"]
+  allergies           Json?    // ["nuts", "dairy"]
+  preferredRetailers  Json?    @map("preferred_retailers") // ["tesco", "sainsburys"]
+  calorieTarget       Int?     @map("calorie_target")
+  macroTargets        Json?    @map("macro_targets") // {protein: 150, carbs: 200, fats: 60}
+
+  household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  @@map("household_preferences")
+}
+
+// ===== PRODUCTS & CATEGORIES =====
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  icon      String?
+  parentId  String?   @map("parent_id")
+
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryTree")
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id              String    @id @default(uuid())
+  name            String
+  brand           String?
+  barcode         String?   @unique
+  categoryId      String?   @map("category_id")
+  imageUrl        String?   @map("image_url")
+  defaultUnit     String?   @map("default_unit") // kg, liters, pieces
+  avgShelfLife    Int?      @map("avg_shelf_life") // days
+  nutritionData   Json?     @map("nutrition_data")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  category        Category?       @relation(fields: [categoryId], references: [id])
+  inventoryItems  InventoryItem[]
+  prices          RetailerPrice[]
+
+  @@map("products")
+}
+
+// ===== INVENTORY =====
+
+model InventoryItem {
+  id              String    @id @default(uuid())
+  householdId     String    @map("household_id")
+  productId       String    @map("product_id")
+  quantity        Float     @default(1)
+  unit            String?
+  expiryDate      DateTime? @map("expiry_date")
+  storageLocation String    @map("storage_location") // fridge, freezer, pantry
+  purchaseDate    DateTime? @map("purchase_date")
+  notes           String?
+  addedBy         String?   @map("added_by")
+  status          String    @default("active") // active, consumed, wasted
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  product   Product   @relation(fields: [productId], references: [id])
+
+  @@index([householdId, status])
+  @@index([expiryDate])
+  @@map("inventory_items")
+}
+
+// ===== RECIPES =====
+
+model Recipe {
+  id              String   @id @default(uuid())
+  name            String
+  description     String?
+  instructions    Json     // step-by-step array
+  prepTime        Int?     @map("prep_time") // minutes
+  cookTime        Int?     @map("cook_time")
+  servings        Int      @default(4)
+  difficulty      String?  // easy, medium, hard
+  imageUrl        String?  @map("image_url")
+  source          String?  // ai_generated, user_created, external
+  nutritionInfo   Json?    @map("nutrition_info")
+  tags            String[] // quick, healthy, vegetarian
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  ingredients RecipeIngredient[]
+  savedBy     SavedRecipe[]
+
+  @@map("recipes")
+}
+
+model RecipeIngredient {
+  id         String  @id @default(uuid())
+  recipeId   String  @map("recipe_id")
+  productId  String? @map("product_id")
+  name       String  // "2 eggs" or "200g flour"
+  quantity   Float?
+  unit       String?
+  optional   Boolean @default(false)
+
+  recipe  Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id])
+
+  @@map("recipe_ingredients")
+}
+
+model SavedRecipe {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  recipeId    String   @map("recipe_id")
+  savedAt     DateTime @default(now()) @map("saved_at")
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, recipeId])
+  @@map("saved_recipes")
+}
+
+// ===== SHOPPING =====
+
+model ShoppingList {
+  id          String   @id @default(uuid())
+  householdId String   @map("household_id")
+  name        String   @default("Main List")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  household Household         @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  items     ShoppingListItem[]
+
+  @@map("shopping_lists")
+}
+
+model ShoppingListItem {
+  id        String   @id @default(uuid())
+  listId    String   @map("list_id")
+  productId String?  @map("product_id")
+  name      String
+  quantity  Float    @default(1)
+  unit      String?
+  bought    Boolean  @default(false)
+  priority  String   @default("normal") // urgent, normal, later
+  addedAt   DateTime @default(now()) @map("added_at")
+  boughtAt  DateTime? @map("bought_at")
+
+  list    ShoppingList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  product Product?     @relation(fields: [productId], references: [id])
+
+  @@map("shopping_list_items")
+}
+
+// ===== RETAILERS & PRICING =====
+
+model Retailer {
+  id       String   @id @default(uuid())
+  name     String   @unique
+  logoUrl  String?  @map("logo_url")
+  website  String?
+  country  String   @default("UK")
+  active   Boolean  @default(true)
+
+  prices RetailerPrice[]
+
+  @@map("retailers")
+}
+
+model RetailerPrice {
+  id         String   @id @default(uuid())
+  retailerId String   @map("retailer_id")
+  productId  String   @map("product_id")
+  price      Float
+  currency   String   @default("GBP")
+  unit       String?
+  inStock    Boolean  @default(true) @map("in_stock")
+  url        String?
+  scrapedAt  DateTime @default(now()) @map("scraped_at")
+
+  retailer Retailer @relation(fields: [retailerId], references: [id])
+  product  Product  @relation(fields: [productId], references: [id])
+  history  PriceHistory[]
+
+  @@unique([retailerId, productId])
+  @@index([productId])
+  @@map("retailer_prices")
+}
+
+model PriceHistory {
+  id               String   @id @default(uuid())
+  retailerPriceId  String   @map("retailer_price_id")
+  price            Float
+  timestamp        DateTime @default(now())
+
+  retailerPrice RetailerPrice @relation(fields: [retailerPriceId], references: [id], onDelete: Cascade)
+
+  @@index([retailerPriceId, timestamp])
+  @@map("price_history")
+}
+
+// ===== WASTE TRACKING =====
+
+model WasteEvent {
+  id          String   @id @default(uuid())
+  householdId String   @map("household_id")
+  productId   String   @map("product_id")
+  quantity    Float
+  unit        String?
+  reason      String   // expired, spoiled, forgotten, other
+  notes       String?
+  wastedAt    DateTime @default(now()) @map("wasted_at")
+
+  household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  product   Product   @relation(fields: [productId], references: [id])
+
+  @@index([householdId, wastedAt])
+  @@map("waste_events")
+}
+
+// ===== NOTIFICATIONS =====
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  type      String   // expiry_alert, waste_warning, weekly_report
+  title     String
+  body      String
+  data      Json?
+  read      Boolean  @default(false)
+  sentAt    DateTime @default(now()) @map("sent_at")
+
+  @@index([userId, read])
+  @@map("notifications")
+}
+
+// ===== SYSTEM LOGS =====
+
+model ActivityLog {
+  id          String   @id @default(uuid())
+  householdId String?  @map("household_id")
+  userId      String?  @map("user_id")
+  action      String   // item_added, item_consumed, recipe_generated
+  details     Json?
+  timestamp   DateTime @default(now())
+
+  @@index([householdId, timestamp])
+  @@map("activity_logs")
+}
