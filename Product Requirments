@@ -1,0 +1,519 @@
+🌟 PRODUCT BRIEF — PANTRI: The Smart Home Food Management App
+1. Product Summary
+
+Pantri is an intelligent iOS-based food management platform that helps households track everything in their kitchen—fridge, pantry, freezer—reduce food waste, maximise savings, improve nutrition, and simplify cooking.
+
+Using a combination of barcode scanning, computer vision, OCR, and AI-powered planning, Pantri automatically tracks what food you have, when it expires, what you can cook with it, and where you should shop to save the most money.
+
+Pantri becomes the central operating system for the modern kitchen.
+
+🧭 2. Product Vision
+
+To create the world’s most intuitive and intelligent home food ecosystem—one that dramatically reduces food waste, saves households money, improves eating habits, and eliminates the daily friction of managing food.
+
+Pantri’s vision:
+A kitchen that manages itself.
+
+Where:
+
+Food is always used before it expires
+
+Shopping lists build themselves
+
+Recipes match what you have
+
+Prices are compared automatically
+
+You never forget what’s in your fridge again
+
+You waste less and save more, effortlessly
+
+🎯 3. The Problem
+
+Modern households face multiple daily inefficiencies:
+
+A. Food Waste
+
+Households throw away 20–30% of their food.
+
+Main causes:
+
+Forgetting what’s in the fridge
+
+Food expiring without noticing
+
+Overbuying
+
+Poor meal planning
+
+B. Lack of Inventory Awareness
+
+People don’t know:
+
+What they already have
+
+What’s expiring
+
+How much of something is left
+
+C. Meal Planning Stress
+
+“What should I cook today?”
+
+Too many recipes require ingredients not at home
+
+No link between what’s expiring and what to cook
+
+D. Grocery Shopping Inefficiency
+
+Prices vary widely between supermarkets
+
+No tool helps optimise entire baskets across retailers
+
+Shoppers overpay without realising
+
+E. Nutrition is hard to manage
+
+No easy way to track nutrition of home-cooked meals
+
+Meal prep requires manual effort
+
+Diet adherence fails due to lack of planning
+
+💡 4. The Solution
+
+Pantri solves all of these problems in a single, intelligent, beautifully designed iOS app.
+
+It allows users to:
+
+1. Track their entire kitchen inventory automatically
+
+Barcode scan
+
+AI computer vision
+
+Expiry OCR
+
+Manual add/edit
+
+Auto-categorisation
+
+2. Get real-time expiry alerts
+
+Notifications before items expire
+
+Daily or weekly view of expiring items
+
+3. Generate recipes using what they already have
+
+AI-powered
+
+Matches dietary preferences
+
+Prioritises items close to expiry
+
+Step-by-step cooking mode
+
+Calorie & macro estimation
+
+4. Automatically build and optimise shopping lists
+
+Items auto-added as they run out
+
+Price comparison across major supermarkets
+
+Split-basket optimisation
+
+Track historical price trends
+
+5. Share everything with their household
+
+Multi-user syncing
+
+Shared shopping list
+
+Shared inventory
+
+Real-time updates
+
+6. Gain insights to save money and reduce waste
+
+Waste analytics
+
+Consumption habits
+
+Money saved by retailer optimisation
+
+Nutrition insights per recipe and week
+
+Pantri is not just an app—it's a personal kitchen assistant.
+
+👤 5. Personas
+Primary Persona: The Busy Home Manager (Age 25–45)
+
+Lives alone or with partner
+
+Wants to save money, reduce waste
+
+Cares about health and diet
+
+Struggles to plan meals
+
+Needs: easy inventory, recipes, shopping optimisation.
+
+Secondary Persona: The Family Planner (Parent 30–50)
+
+Large household
+
+Multiple food preferences
+
+Grocery bills are significant
+
+Wants predictability and structure
+
+Needs: shared lists, bulk management, expiry alerts.
+
+Tertiary Persona: The Health-Conscious Urban Professional (25–40)
+
+Fitness-focused
+
+Tracks calories/macros
+
+Prefers cooking at home
+
+Needs: nutrition tracking & smart recipes.
+
+Emerging Persona: Sustainability-Driven Consumers
+
+Wants to reduce carbon footprint
+
+Avoids waste
+
+Prefers smart, automated solutions
+
+🧩 6. Core Features (Detailed)
+
+Below is a full breakdown of all features Pantri must include.
+
+A. Inventory Management
+
+Adding Items
+
+Barcode scanning using iOS camera
+
+Expiry date OCR extraction
+
+Product recognition using AI vision model
+
+Manual entry with quick-add shortcuts
+
+Voice entry (future)
+
+Storing Information
+
+Product name, brand
+
+Quantity (units or weight)
+
+Expiry date
+
+Storage location: fridge, freezer, pantry
+
+Category: dairy, produce, grains, etc.
+
+Nutrition information (auto-fetched)
+
+Managing Items
+
+Increase/decrease quantity
+
+Edit expiry
+
+Move location
+
+Mark as consumed
+
+Mark as waste
+
+Duplicate detection
+
+Inventory history log
+
+Viewing Inventory
+
+Category view
+
+Expiry urgency view (color-coded)
+
+Search & filter
+
+Low-stock alerts
+
+B. Expiry Tracking & Food Waste Reduction
+
+Daily expiry checks
+
+Push notifications (iOS native)
+
+Batch reminders (e.g., “3 items expire tomorrow”)
+
+Smart waste insights:
+
+Which items you waste most
+
+Common patterns
+
+Suggestions:
+“Your mushrooms expire in 2 days. Here are 5 recipes using mushrooms.”
+
+C. AI Recipe Engine
+
+AI-generated recipes based on available ingredients
+
+Prioritise:
+
+Near-expiry items
+
+Most common ingredients first
+
+Dietary preferences
+
+User cooking skill level
+
+Step-by-step cooking instructions
+
+Integrated timers
+
+Ingredient substitution suggestions
+
+Calorie/macronutrient calculation
+
+Weekly meal planner
+
+D. Smart Shopping List
+
+Auto-add items that run out
+
+Add items manually
+
+Add entire recipes to shopping list
+
+Shared shopping list with household
+
+“Buy now / later” toggles
+
+E. Supermarket Price Comparison & Basket Optimisation
+
+Real-time or near-live price data
+
+Price comparison across:
+
+Tesco
+
+Sainsbury’s
+
+Asda
+
+M&S
+
+Waitrose
+
+Ocado
+
+Individual item price comparison
+
+Total basket comparison
+
+Algorithmic split-basket suggestion
+
+Track weekly/monthly savings
+
+Price history graph for each item
+
+F. Household Collaboration
+
+Multiple users per household
+
+Shared inventory
+
+Shared shopping list
+
+Activity logs
+
+Role-based permissions
+
+G. Analytics & Insights
+
+Waste score
+
+Weekly/monthly summary
+
+Nutrition breakdown
+
+Savings calculated through:
+
+Avoided waste
+
+Cheaper retailers chosen
+
+Smart predictions:
+
+“You usually run out of milk every 5 days.”
+
+“You frequently waste strawberries; consider buying smaller packs.”
+
+🌈 7. End-to-End User Journey
+1. Onboarding
+
+User downloads iOS app
+
+Signs up (email or Apple Sign-In)
+
+Creates household
+
+Sets dietary preferences
+
+Sets preferred supermarkets
+
+2. Adding Items
+
+User scans products after grocery shopping
+
+App identifies product
+
+OCR reads expiry
+
+Item added to inventory
+
+3. Daily Use
+
+App sends expiry alerts
+
+User checks “expiring soon”
+
+User sees suggested recipes
+
+Cooks using step-by-step mode
+
+Marks ingredients as consumed
+
+4. Shopping
+
+User opens shopping list
+
+Sees cheapest supermarket
+
+Receives split-basket suggestion
+
+Goes shopping or orders online
+
+5. Insights
+
+Weekly report:
+“You saved £15 this week by choosing Tesco for 60% of your basket.”
+
+Waste report
+
+Nutrition analysis
+
+💎 8. Value Proposition
+For Households:
+
+Save money through price optimisation
+
+Reduce waste easily
+
+Healthier eating without effort
+
+Make meal planning easy
+
+For Families:
+
+Everyone stays on the same page
+
+No duplicate buying
+
+Less chaos
+
+For Health-Conscious Users:
+
+Accurate meal calories
+
+Easy macro balancing
+
+For Sustainability-Minded Users:
+
+Reduce carbon footprint
+
+Track waste impact
+
+Pantri saves time, money, and stress.
+
+📈 9. Success Metrics
+Activation & Engagement
+
+% of users adding inventory in week 1
+
+Daily active users
+
+Notification engagement rate
+
+Business & Value
+
+Average money saved per user
+
+Reduction in average waste
+
+LTV and Retention
+
+Conversion to premium features (future)
+
+Product Quality
+
+Expiry detection accuracy
+
+OCR accuracy for labels
+
+Crash-free sessions
+
+🧱 10. Product Principles
+
+Automation over manual work
+
+Clarity and simplicity
+
+Delightful design
+
+Assist, don’t overwhelm
+
+Save time, save money, save food
+
+🏁 11. Summary
+
+Pantri is an intelligent assistant designed to completely transform how households manage food.
+
+It solves real-world problems:
+
+Waste
+
+Money loss
+
+Poor planning
+
+Nutrition tracking
+
+Shopping complexity
+
+It introduces an experience no platform today offers:
+
+Inventory automation
+
+AI-driven recipes
+
+Split-basket optimisation
+
+Collaborative household food management
+
+Deep insights into waste and nutrition
+
+Pantri is the ultimate smart kitchen companion.
